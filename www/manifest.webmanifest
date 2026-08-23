@@ -1,0 +1,15 @@
+{
+  "name": "Target Rush",
+  "short_name": "Target Rush",
+  "description": "A fast, offline target-shooting game.",
+  "id": "../simulator.html",
+  "start_url": "../simulator.html?v=7",
+  "scope": "../",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0e17",
+  "theme_color": "#0b0e17",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

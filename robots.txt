@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jeeggs.github.io/target-rush/sitemap.xml

@@ -1,0 +1,9 @@
+{
+  "appId": "com.targetrush.game",
+  "appName": "Target Rush",
+  "webDir": "www",
+  "backgroundColor": "#0b0e17",
+  "server": {
+    "androidScheme": "https"
+  }
+}
