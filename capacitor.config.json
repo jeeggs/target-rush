@@ -3,6 +3,10 @@
   "appName": "Target Rush",
   "webDir": "www",
   "backgroundColor": "#0b0e17",
+  "ios": {
+    "contentInset": "always",
+    "preferredContentMode": "mobile"
+  },
   "server": {
     "androidScheme": "https"
   }

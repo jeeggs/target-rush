@@ -12,7 +12,7 @@ const difficultyPicker = document.querySelector('#difficultyPicker');
 const difficultyButtons = document.querySelectorAll('.difficulty-button');
 const installHint = document.querySelector('#installHint');
 
-let score = 0, shots = 0, hits = 0, time = 30, playing = false, timer, moveTimer;
+let score = 0, shots = 0, hits = 0, time = 30, playing = false, timer, moveTimer, endTime;
 let soundOn = true;
 let level = 'easy';
 let audioContext;
@@ -73,12 +73,13 @@ function showPoints(text, x, y, miss = false) {
 function startGame() {
   clearInterval(timer); clearTimeout(moveTimer);
   score = shots = hits = 0; time = 30; playing = true;
+  endTime = Date.now() + time * 1000;
   panel.hidden = true; target.hidden = false;
   updateStats(); moveTarget();
   timer = setInterval(() => {
-    time--; updateStats();
+    time = Math.max(0, Math.ceil((endTime - Date.now()) / 1000)); updateStats();
     if (time <= 0) endGame();
-  }, 1000);
+  }, 250);
 }
 
 function endGame() {
@@ -123,6 +124,11 @@ document.addEventListener('keydown', event => {
 });
 
 document.addEventListener('contextmenu', event => event.preventDefault());
+
+// End cleanly if the deadline passes while a phone call or app switch hides the game.
+document.addEventListener('visibilitychange', () => {
+  if (playing && !document.hidden && Date.now() >= endTime) endGame();
+});
 
 // Home-screen launches hide Safari's address bar and feel like a normal app.
 const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
