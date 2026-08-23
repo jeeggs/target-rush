@@ -1,10 +1,8 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta http-equiv="refresh" content="0; url=simulator.html?v=7" />
-  <title>Target Rush</title>
-</head>
-<body><p><a href="simulator.html?v=7">Open Target Rush</a></p></body>
-</html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#070912"><meta name="description" content="Target Rush — a fast reaction and aim game."><title>Target Rush</title><link rel="icon" href="www/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="www/style.css?v=8"></head>
+<body><main class="game-shell">
+<header><div class="brand"><span class="brand-mark" aria-hidden="true">+</span><div><p class="eyebrow">AIM TRAINER</p><h1>Target Rush</h1></div></div><div class="header-actions"><button id="backButton" class="icon-button back-button" aria-label="Stop game and choose another level" hidden>Back</button><button id="soundButton" class="icon-button" aria-label="Toggle sound">Sound: On</button></div></header>
+<section class="stats" aria-label="Game statistics"><div><span>Score</span><strong id="score">0</strong></div><div><span>Time</span><strong id="time">30</strong></div><div><span>Accuracy</span><strong id="accuracy">—</strong></div><div><span>Best</span><strong id="best">0</strong></div></section>
+<section id="arena" class="arena" aria-label="Target shooting area"><div class="grid" aria-hidden="true"></div><div id="target" class="target" role="button" aria-label="Target" hidden><span></span><span></span><span></span><span></span></div><div id="startPanel" class="panel"><p class="panel-kicker">30 SECOND CHALLENGE</p><h2 id="panelTitle">Lock in. Aim fast.</h2><p id="panelText">Choose your speed, hit every target, and chase a new high score.</p><div id="difficultyPicker" class="difficulty" aria-label="Choose difficulty"><button class="difficulty-button selected" data-level="easy">Easy<small>Slow</small></button><button class="difficulty-button" data-level="hard">Hard<small>Fast</small></button><button class="difficulty-button" data-level="impossible">Impossible<small>Fastest</small></button></div><button id="startButton" class="start-button">Start Game</button></div><div id="flash" class="flash" aria-hidden="true"></div></section>
+<footer id="installHint">Tap the target • Play anywhere • No download needed</footer>
+</main><script src="www/game.js?v=8"></script></body></html>

@@ -2,6 +2,7 @@ const arena = document.querySelector('#arena');
 const target = document.querySelector('#target');
 const panel = document.querySelector('#startPanel');
 const startButton = document.querySelector('#startButton');
+const backButton = document.querySelector('#backButton');
 const soundButton = document.querySelector('#soundButton');
 const scoreEl = document.querySelector('#score');
 const timeEl = document.querySelector('#time');
@@ -74,7 +75,7 @@ function startGame() {
   clearInterval(timer); clearTimeout(moveTimer);
   score = shots = hits = 0; time = 30; playing = true;
   endTime = Date.now() + time * 1000;
-  panel.hidden = true; target.hidden = false;
+  panel.hidden = true; target.hidden = false; backButton.hidden = false;
   updateStats(); moveTarget();
   timer = setInterval(() => {
     time = Math.max(0, Math.ceil((endTime - Date.now()) / 1000)); updateStats();
@@ -84,12 +85,22 @@ function startGame() {
 
 function endGame() {
   playing = false; clearInterval(timer); clearTimeout(moveTimer); target.hidden = true;
+  backButton.hidden = true;
   if (score > best) { best = score; localStorage.setItem('targetRushBest', best); }
   bestEl.textContent = best;
   document.querySelector('#panelTitle').textContent = `Final score: ${score}`;
   document.querySelector('#panelText').textContent = `${hits} hits • ${accuracyEl.textContent} accuracy`;
   difficultyPicker.hidden = false;
   startButton.textContent = 'Play Again'; panel.hidden = false; beep(180, .2);
+}
+
+function returnToLevelPicker() {
+  playing = false; clearInterval(timer); clearTimeout(moveTimer);
+  target.hidden = true; backButton.hidden = true;
+  document.querySelector('#panelTitle').textContent = 'Choose another level.';
+  document.querySelector('#panelText').textContent = 'Pick a difficulty when you are ready to play again.';
+  difficultyPicker.hidden = false;
+  startButton.textContent = 'Start Game'; panel.hidden = false;
 }
 
 target.addEventListener('pointerdown', event => {
@@ -111,6 +122,7 @@ arena.addEventListener('pointerdown', event => {
 });
 
 startButton.addEventListener('click', startGame);
+backButton.addEventListener('click', returnToLevelPicker);
 difficultyButtons.forEach(button => button.addEventListener('click', () => {
   level = button.dataset.level;
   difficultyButtons.forEach(choice => choice.classList.toggle('selected', choice === button));

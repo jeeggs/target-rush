@@ -25,7 +25,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     server = ThreadingHTTPServer(("0.0.0.0", args.port), SimpleHTTPRequestHandler)
-    path = "/simulator.html?v=7"
+    path = "/?v=8"
     print("Target Rush is ready.", flush=True)
     print(f"On this computer: http://127.0.0.1:{args.port}{path}", flush=True)
     print(f"On an iPhone:      http://{local_ip()}:{args.port}{path}", flush=True)

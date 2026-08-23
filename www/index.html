@@ -13,16 +13,22 @@
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="icon.svg" />
-  <link rel="stylesheet" href="style.css?v=4" />
+  <link rel="stylesheet" href="style.css?v=5" />
 </head>
 <body>
   <main class="game-shell">
     <header>
-      <div>
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">+</span>
+        <div>
         <p class="eyebrow">AIM TRAINER</p>
         <h1>Target Rush</h1>
+        </div>
       </div>
-      <button id="soundButton" class="icon-button" aria-label="Toggle sound">Sound: On</button>
+      <div class="header-actions">
+        <button id="backButton" class="icon-button back-button" aria-label="Stop game and choose another level" hidden>Back</button>
+        <button id="soundButton" class="icon-button" aria-label="Toggle sound">Sound: On</button>
+      </div>
     </header>
 
     <section class="stats" aria-label="Game statistics">
@@ -39,9 +45,9 @@
       </div>
 
       <div id="startPanel" class="panel">
-        <p class="panel-kicker">READY?</p>
-        <h2 id="panelTitle">Hit as many targets as you can.</h2>
-        <p id="panelText">Targets get smaller and faster. Missing costs 1 point.</p>
+        <p class="panel-kicker">30 SECOND CHALLENGE</p>
+        <h2 id="panelTitle">Lock in. Aim fast.</h2>
+        <p id="panelText">Choose your speed, hit every target, and chase a new high score.</p>
         <div id="difficultyPicker" class="difficulty" aria-label="Choose difficulty">
           <button class="difficulty-button selected" data-level="easy">Easy<small>Slow</small></button>
           <button class="difficulty-button" data-level="hard">Hard<small>Fast</small></button>
@@ -54,6 +60,6 @@
 
     <footer>Tap the target • Play anywhere, even offline</footer>
   </main>
-  <script src="game.js?v=4"></script>
+  <script src="game.js?v=5"></script>
 </body>
 </html>

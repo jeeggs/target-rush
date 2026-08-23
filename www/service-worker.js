@@ -1,4 +1,4 @@
-const CACHE = 'target-rush-v2';
+const CACHE = 'target-rush-v3';
 const FILES = ['./', './index.html', './style.css', './game.js', './manifest.webmanifest', './icon.svg'];
 
 self.addEventListener('install', event => {
