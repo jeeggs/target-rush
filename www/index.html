@@ -13,19 +13,20 @@
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="icon.svg" />
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="style.css?v=6" />
 </head>
 <body>
   <main class="game-shell">
     <header>
       <div class="brand">
-        <span class="brand-mark" aria-hidden="true">+</span>
+        <img class="brand-mark" src="icon.svg" alt="" aria-hidden="true" />
         <div>
         <p class="eyebrow">AIM TRAINER</p>
         <h1>Target Rush</h1>
         </div>
       </div>
       <div class="header-actions">
+        <button id="shopButton" class="icon-button shop-button">Shop</button>
         <button id="backButton" class="icon-button back-button" aria-label="Stop game and choose another level" hidden>Back</button>
         <button id="soundButton" class="icon-button" aria-label="Toggle sound">Sound: On</button>
       </div>
@@ -36,6 +37,7 @@
       <div><span>Time</span><strong id="time">30</strong></div>
       <div><span>Accuracy</span><strong id="accuracy">—</strong></div>
       <div><span>Best</span><strong id="best">0</strong></div>
+      <div class="coin-stat"><span>Coins</span><strong id="coins">0</strong></div>
     </section>
 
     <section id="arena" class="arena" aria-label="Target shooting area">
@@ -55,11 +57,17 @@
         </div>
         <button id="startButton" class="start-button">Start Game</button>
       </div>
+      <div id="shopPanel" class="panel shop-panel" hidden>
+        <p class="panel-kicker">TARGET SHOP</p><h2>Pick your look.</h2>
+        <p>Your score becomes coins after every round. Collect all 60 targets.</p>
+        <div id="shopGrid" class="shop-grid"></div>
+        <button id="closeShopButton" class="start-button secondary-button">Back to Game</button>
+      </div>
       <div id="flash" class="flash" aria-hidden="true"></div>
     </section>
 
-    <footer>Tap the target • Play anywhere, even offline</footer>
+    <footer>Click or tap the target • 30 seconds • Space to start</footer>
   </main>
-  <script src="game.js?v=5"></script>
+  <script src="game.js?v=6"></script>
 </body>
 </html>

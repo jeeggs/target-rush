@@ -4,10 +4,12 @@ const panel = document.querySelector('#startPanel');
 const startButton = document.querySelector('#startButton');
 const backButton = document.querySelector('#backButton');
 const soundButton = document.querySelector('#soundButton');
+const shopButton = document.querySelector('#shopButton'), shopPanel = document.querySelector('#shopPanel'), closeShopButton = document.querySelector('#closeShopButton'), shopGrid = document.querySelector('#shopGrid');
 const scoreEl = document.querySelector('#score');
 const timeEl = document.querySelector('#time');
 const accuracyEl = document.querySelector('#accuracy');
 const bestEl = document.querySelector('#best');
+const coinsEl = document.querySelector('#coins');
 const flash = document.querySelector('#flash');
 const difficultyPicker = document.querySelector('#difficultyPicker');
 const difficultyButtons = document.querySelectorAll('.difficulty-button');
@@ -20,10 +22,53 @@ let audioContext;
 const levels = {
   easy: { startSize: 104, minSize: 70, interval: 1350, minInterval: 850, points: 10 },
   hard: { startSize: 82, minSize: 48, interval: 760, minInterval: 380, points: 20 },
-  impossible: { startSize: 64, minSize: 34, interval: 390, minInterval: 170, points: 35 }
+  impossible: { startSize: 68, minSize: 40, interval: 590, minInterval: 300, points: 35 }
 };
 let best = Number(localStorage.getItem('targetRushBest')) || 0;
+let coins = Number(localStorage.getItem('targetRushCoins')) || 0;
+let ownedTargets = JSON.parse(localStorage.getItem('targetRushOwned') || '["classic"]');
+let equippedTarget = localStorage.getItem('targetRushEquipped') || 'classic';
+const targetPalettes = [
+  ['classic','Classic Rush',0,'#ff4778','#350716'],
+  ['ocean','Ocean Blue',150,'#247cff','#061d52'],['bubblegum','Bubblegum',150,'#ff72c6','#55103c'],
+  ['ice','Ice Beam',200,'#55e7ff','#063b48'],['violet','Ultra Violet',200,'#a875ff','#271052'],
+  ['lime','Laser Lime',150,'#c7ff4a','#304500'],['sunset','Sunset Orange',150,'#ff8a3d','#5a1c00'],
+  ['ruby','Ruby Red',200,'#ff334f','#52000c'],['gold','Gold Rush',200,'#ffd84a','#544000'],
+  ['mint','Mint Flash',150,'#55ffc2','#064634'],['coral','Coral Pop',150,'#ff776c','#511510'],
+  ['indigo','Indigo Ink',200,'#5d5cff','#111054'],['aqua','Aqua Pulse',200,'#31ffd7','#004b42'],
+  ['peach','Peach Punch',150,'#ffad82','#542615'],['lemon','Lemon Zap',150,'#f5ff52','#464900'],
+  ['magenta','Mega Magenta',200,'#ff39dd','#530047'],['sky','Sky High',200,'#65bfff','#0c3452'],
+  ['emerald','Emerald',150,'#25e688','#07472c'],['lavender','Lavender',150,'#c29cff','#352053'],
+  ['fire','Fireball',200,'#ff542e','#571000'],['plasma','Plasma',200,'#d448ff','#3b0750'],
+  ['turquoise','Turquoise',150,'#34d9cd','#07443f'],['rose','Electric Rose',150,'#ff5e9f','#55122f'],
+  ['cobalt','Cobalt',200,'#356eff','#071c54'],['amber','Amber Glow',200,'#ffb52e','#533200'],
+  ['jade','Jade Strike',150,'#43d17f','#0c4125'],['lilac','Lilac Dream',150,'#df82ff','#471456'],
+  ['crimson','Crimson Heat',200,'#df2948','#4c0612'],['neon','Neon Yellow',200,'#eaff19','#414800'],
+  ['lagoon','Blue Lagoon',150,'#24b7db','#073a49'],['salmon','Salmon Spark',150,'#ff806e','#501a13'],
+  ['royal','Royal Purple',200,'#8454e8','#26104d'],['tangerine','Tangerine',200,'#ff7824','#552000'],
+  ['spring','Spring Green',150,'#85f06a','#1c4812'],['orchid','Orchid',150,'#e55dcc','#4f0d43'],
+  ['navy','Night Blue',200,'#4267b9','#0b1939'],['copper','Copper',200,'#d77b45','#47200b'],
+  ['seafoam','Seafoam',150,'#75e6c5','#16473b'],['cherry','Cherry Bomb',150,'#f04470','#4d0920'],
+  ['electric','Electric Blue',200,'#00aaff','#003651'],['grape','Grape Soda',200,'#aa55ee','#33104c'],
+  ['apple','Green Apple',150,'#7ee12f','#214700'],['flamingo','Flamingo',150,'#ff8bb8','#501b31'],
+  ['arctic','Arctic White',200,'#d8f7ff','#24505b'],['midnight','Midnight Glow',200,'#6370ff','#121748'],
+  ['dragonfruit','Dragon Fruit',150,'#ff3f91','#57102f'],['moonlight','Moonlight',150,'#b9c8ff','#293357'],
+  ['toxic','Toxic Green',200,'#9dff00','#2d4c00'],['blueberry','Blueberry',200,'#5353d9','#151542'],
+  ['mango','Mango Blast',150,'#ffbd39','#563500'],['watermelon','Watermelon',150,'#ff526c','#0b4a32'],
+  ['hologram','Hologram',200,'#66ffe3','#4c1760'],['meteor','Meteor',200,'#ff6438','#34125b'],
+  ['candy','Cotton Candy',150,'#ff9fdb','#32698a'],['storm','Storm Cloud',150,'#8294ad','#253143'],
+  ['phoenix','Phoenix',200,'#ff3b19','#ffd23f'],['alien','Alien Glow',200,'#6dff5a','#2c0752'],
+  ['deepsea','Deep Sea',150,'#087dbd','#032b47'],['raspberry','Raspberry',150,'#e8297d','#490b2c'],
+  ['prism','Prism Finale',200,'#7fffd4','#ff3cac']
+];
+const targetStyles = targetPalettes.map(([id,name,price,color,core]) => ({id,name,price,color,core}));
 bestEl.textContent = best;
+coinsEl.textContent = coins;
+function applyTargetStyle(){ const s=targetStyles.find(x=>x.id===equippedTarget)||targetStyles[0]; target.style.setProperty('--target-color',s.color); target.style.setProperty('--target-core',s.core); }
+function saveShop(){ localStorage.setItem('targetRushCoins',coins); localStorage.setItem('targetRushOwned',JSON.stringify(ownedTargets)); localStorage.setItem('targetRushEquipped',equippedTarget); coinsEl.textContent=coins; }
+function renderShop(){ shopGrid.innerHTML=targetStyles.map(item=>{ const owned=ownedTargets.includes(item.id), equipped=equippedTarget===item.id; return `<button class="target-card ${equipped?'equipped':''}" data-target-id="${item.id}" ${!owned&&coins<item.price?'disabled':''}><span class="target-preview" style="--preview-color:${item.color};--preview-core:${item.core}"><i></i><i></i><i></i></span><strong>${item.name}</strong><small>${equipped?'Equipped':owned?'Equip':item.price+' coins'}</small></button>`; }).join(''); }
+function openShop(){ if(playing)return; panel.hidden=true; shopPanel.hidden=false; renderShop(); }
+function closeShop(){ shopPanel.hidden=true; panel.hidden=false; }
 
 function beep(frequency, duration = .06) {
   if (!soundOn) return;
@@ -88,8 +133,9 @@ function endGame() {
   backButton.hidden = true;
   if (score > best) { best = score; localStorage.setItem('targetRushBest', best); }
   bestEl.textContent = best;
+  coins += score; saveShop();
   document.querySelector('#panelTitle').textContent = `Final score: ${score}`;
-  document.querySelector('#panelText').textContent = `${hits} hits • ${accuracyEl.textContent} accuracy`;
+  document.querySelector('#panelText').textContent = `${hits} hits • ${accuracyEl.textContent} accuracy • +${score} coins`;
   difficultyPicker.hidden = false;
   startButton.textContent = 'Play Again'; panel.hidden = false; beep(180, .2);
 }
@@ -122,6 +168,9 @@ arena.addEventListener('pointerdown', event => {
 });
 
 startButton.addEventListener('click', startGame);
+shopButton.addEventListener('click', openShop);
+closeShopButton.addEventListener('click', closeShop);
+shopGrid.addEventListener('click', event => { const card=event.target.closest('[data-target-id]'); if(!card)return; const item=targetStyles.find(x=>x.id===card.dataset.targetId); if(!ownedTargets.includes(item.id)){ if(coins<item.price)return; coins-=item.price; ownedTargets.push(item.id); } equippedTarget=item.id; saveShop(); applyTargetStyle(); renderShop(); beep(620,.1); });
 backButton.addEventListener('click', returnToLevelPicker);
 difficultyButtons.forEach(button => button.addEventListener('click', () => {
   level = button.dataset.level;
@@ -148,3 +197,5 @@ if (standalone && installHint) installHint.textContent = 'Tap the target • 30 
 
 // Stop iOS Safari from treating fast play gestures as page scrolling/zooming.
 arena.addEventListener('touchmove', event => event.preventDefault(), { passive: false });
+applyTargetStyle();
+
